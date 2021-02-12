@@ -29,9 +29,17 @@ class X11:
         self.instructions = []
         self.modifiers = []
         self.parsers = []
-        self.outputs = []
+
+    def clean(self):
+        self.instructions = []
+        self.modifiers = []
+        self.parsers = []
+
+        return self
 
     def run(self):
+        self.outputs = []
+
         proc = subprocess.run(
                 ['xdotool'] + list(itertools.chain(*self.instructions)),
                 stdout=subprocess.PIPE,
@@ -43,7 +51,7 @@ class X11:
         self.status = proc.returncode
 
         if proc.returncode:
-            return self
+            return self.clean()
 
         it = iter(self.stdout.rstrip().split('\n'))
         xs = zip(self.instructions, self.parsers)
@@ -52,7 +60,7 @@ class X11:
             if (parser and not (command in self.modifiers and not last)):
                 self.outputs.append(parser(it))
 
-        return self
+        return self.clean()
 
     def instruction(function):
         @functools.wraps(function)
