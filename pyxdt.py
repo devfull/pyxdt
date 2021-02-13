@@ -21,7 +21,7 @@ def findall_int(*args):
 
 
 def consume(iterable, function=int, all=False):
-      return (list if(all) else next)(map(function, iterable))
+    return (list if(all) else next)(map(function, iterable))
 
 
 class X11:
@@ -135,7 +135,7 @@ class X11:
             if ('shell' in kwargs):
                 iterator = zip(*[iterator] * 4)
 
-            return dict(zip(keys, findall_int(*iterator)))
+            return dict(zip(keys, findall_int(next(iterator))))
         return parser
 
     @instruction
@@ -257,7 +257,7 @@ class X11:
             if ('shell' in kwargs):
                 iterator = zip(*[iterator] * 2)
 
-            return dict(zip(['x', 'y'], findall_int(*iterator)))
+            return dict(zip(['x', 'y'], findall_int(next(iterator))))
         return parser
 
     @instruction
